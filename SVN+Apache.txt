@@ -1,0 +1,34 @@
+1，安装
+yum -y install httpd subversion  mod_dav_svn
+2.
+上传配置文件subversion.conf 到/etc/httpd/conf.d/
+创建用户: useradd svn
+3.
+修改httpd.conf配置文件
+User svn
+Group svn
+4.
+切换到svn用户操作，去创建相关的配置文件
+su - svn
+
+mkdir conf
+cd conf
+htpasswd -c users  tom
+
+vim authz
+[groups]
+wg=tom
+
+[/]
+@wg=rw
+5.
+创建一个版本库
+cd /home/svn
+svnadmin create 1705A
+6.
+切回到root用户重启httpd
+exit
+systemctl stop firewalld
+setenforce 0
+systemctl restart httpd
+7.浏览器访问：http://192.168.189.173/svn/1705A/
